@@ -35,11 +35,4 @@
 
 Maximum entropy = 1 (ideal random)
 
-<h3>Results Summary</h3> 
 
-
-<h3>Conclusion</h3>
-
-The SRAM startup state exhibits measurable bias but maintains high entropy (~0.97), indicating strong statistical randomness with some bit imbalance.
-
-Post-processing techniques such as XOR folding and Von Neumann correction can further improve bit balance.

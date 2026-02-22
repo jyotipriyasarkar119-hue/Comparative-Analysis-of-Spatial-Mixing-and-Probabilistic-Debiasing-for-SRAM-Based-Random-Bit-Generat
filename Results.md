@@ -94,6 +94,14 @@ Von Neumann debiasing.
 <h2>Graphs</h2>
 
 
+![Shannon Entropy Curve](/entropy_curve.png)
+
+
+![Bias Analysis](/bias_analysis.png)
+
+
+![Entropy vs Bits](/entropy_vs_bits.png)
+
 <hr>
 
 

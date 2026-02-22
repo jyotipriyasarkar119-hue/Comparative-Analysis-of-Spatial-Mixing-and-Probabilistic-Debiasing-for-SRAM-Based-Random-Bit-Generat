@@ -11,8 +11,8 @@
 
 - Bit Frequency Measurement
 - Shannon Entropy Calculation
-- XOR Folding (optional)
-- Von Neumann Correction (optional)
+- XOR Folding 
+- Von Neumann Correction 
 - Combined Post-Processing
 
 <h3>Hardware Platform</h3>

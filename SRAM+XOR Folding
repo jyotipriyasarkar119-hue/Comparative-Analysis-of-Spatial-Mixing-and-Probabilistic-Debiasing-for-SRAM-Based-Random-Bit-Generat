@@ -1,0 +1,97 @@
+/*
+  SRAM + XOR Folding Random Bit Generator
+  + Bit Frequency Measurement
+  + Shannon Entropy Calculation
+
+  Board: Arduino Uno (ATmega328P)
+*/
+
+#include <Arduino.h>
+#include <math.h>
+
+#define SRAM_START 0x0100
+#define SRAM_READ_SIZE 128     // Raw bytes
+#define FOLD_BLOCK_SIZE 8      // XOR 8 bytes into 1
+
+void setup() {
+
+  Serial.begin(9600);
+  delay(2000);
+
+  Serial.println("=== SRAM + XOR RANDOM GENERATOR ===");
+  Serial.println("------------------------------------");
+
+  uint8_t *sram_ptr = (uint8_t*)SRAM_START;
+
+  unsigned long totalBits = 0;
+  unsigned long onesCount = 0;
+  unsigned long zerosCount = 0;
+
+  Serial.println("XOR Folded Bit Stream:");
+
+  // Process in blocks of 8 bytes
+  for (int i = 0; i < SRAM_READ_SIZE; i += FOLD_BLOCK_SIZE) {
+
+    uint8_t foldedByte = 0;
+
+    // XOR 8 bytes together
+    for (int j = 0; j < FOLD_BLOCK_SIZE; j++) {
+      foldedByte ^= sram_ptr[i + j];
+    }
+
+    // Convert folded byte to bits
+    for (int bit = 7; bit >= 0; bit--) {
+
+      uint8_t bitVal = (foldedByte >> bit) & 1;
+
+      Serial.print(bitVal);
+
+      totalBits++;
+
+      if (bitVal == 1)
+        onesCount++;
+      else
+        zerosCount++;
+    }
+  }
+
+  Serial.println();
+  Serial.println("------------------------------------");
+
+  float p1 = (float)onesCount / totalBits;
+  float p0 = (float)zerosCount / totalBits;
+
+  float entropy = 0;
+
+  if (p1 > 0)
+    entropy -= p1 * (log(p1) / log(2));
+
+  if (p0 > 0)
+    entropy -= p0 * (log(p0) / log(2));
+
+  Serial.println("STATISTICS (After XOR Folding):");
+  Serial.print("Total Bits: ");
+  Serial.println(totalBits);
+
+  Serial.print("Ones: ");
+  Serial.println(onesCount);
+
+  Serial.print("Zeros: ");
+  Serial.println(zerosCount);
+
+  Serial.print("P(1): ");
+  Serial.println(p1, 6);
+
+  Serial.print("P(0): ");
+  Serial.println(p0, 6);
+
+  Serial.print("Entropy: ");
+  Serial.println(entropy, 6);
+
+  Serial.println("------------------------------------");
+  Serial.println("Power OFF fully to regenerate SRAM state.");
+}
+
+void loop() {
+  // Required empty loop
+}

@@ -1,0 +1,105 @@
+/*
+  SRAM + Von Neumann Debiasing
+  + Bit Frequency Measurement
+  + Shannon Entropy Calculation
+
+  Board: Arduino Uno (ATmega328P)
+*/
+
+#include <Arduino.h>
+#include <math.h>
+
+#define SRAM_START 0x0100
+#define SRAM_READ_SIZE 128   // 1024 raw bits
+
+void setup() {
+
+  Serial.begin(9600);
+  delay(2000);
+
+  Serial.println("=== SRAM + VON NEUMANN EXPERIMENT ===");
+  Serial.println("--------------------------------------");
+
+  uint8_t *sram_ptr = (uint8_t*)SRAM_START;
+
+  unsigned long totalBits = 0;
+  unsigned long onesCount = 0;
+  unsigned long zerosCount = 0;
+
+  Serial.println("Von Neumann Bit Stream:");
+
+  int previousBit = -1;
+
+  for (int i = 0; i < SRAM_READ_SIZE; i++) {
+
+    uint8_t value = sram_ptr[i];
+
+    for (int bit = 7; bit >= 0; bit--) {
+
+      uint8_t currentBit = (value >> bit) & 1;
+
+      if (previousBit == -1) {
+        previousBit = currentBit;
+      } else {
+
+        // Apply Von Neumann rule
+        if (previousBit == 0 && currentBit == 1) {
+          Serial.print(0);
+          zerosCount++;
+          totalBits++;
+        }
+        else if (previousBit == 1 && currentBit == 0) {
+          Serial.print(1);
+          onesCount++;
+          totalBits++;
+        }
+
+        // Discard 00 and 11
+        previousBit = -1;
+      }
+    }
+  }
+
+  Serial.println();
+  Serial.println("--------------------------------------");
+
+  float p1 = 0;
+  float p0 = 0;
+  float entropy = 0;
+
+  if (totalBits > 0) {
+
+    p1 = (float)onesCount / totalBits;
+    p0 = (float)zerosCount / totalBits;
+
+    if (p1 > 0)
+      entropy -= p1 * (log(p1) / log(2));
+
+    if (p0 > 0)
+      entropy -= p0 * (log(p0) / log(2));
+  }
+
+  Serial.println("STATISTICS (Von Neumann):");
+  Serial.print("Total Bits: ");
+  Serial.println(totalBits);
+
+  Serial.print("Ones: ");
+  Serial.println(onesCount);
+
+  Serial.print("Zeros: ");
+  Serial.println(zerosCount);
+
+  Serial.print("P(1): ");
+  Serial.println(p1, 6);
+
+  Serial.print("P(0): ");
+  Serial.println(p0, 6);
+
+  Serial.print("Entropy: ");
+  Serial.println(entropy, 6);
+
+  Serial.println("--------------------------------------");
+  Serial.println("Power OFF fully to regenerate SRAM state.");
+}
+
+void loop() {}

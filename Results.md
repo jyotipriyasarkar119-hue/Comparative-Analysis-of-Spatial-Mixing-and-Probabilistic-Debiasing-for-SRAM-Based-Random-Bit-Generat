@@ -1,7 +1,7 @@
 
 <h1>SRAM Startup Randomness Analysis</h1>
 
-<h2> SRAM Random Bit Generation </h2>
+<h2>1. SRAM Random Bit Generation </h2>
 <hr>
 
 <h2>Statistical Analysis</h2>

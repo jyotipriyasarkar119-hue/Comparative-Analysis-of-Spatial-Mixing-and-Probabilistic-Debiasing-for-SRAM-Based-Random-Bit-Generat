@@ -255,4 +255,68 @@ This suggests that the observed bias is spatially correlated rather than purely 
 Global mixing methods such as Half-Split XOR demonstrated superior entropy enhancement.
 </p>
 
+<hr>
+
+<h1>SRAM + XOR Folding + Von Neumann Debiasing</h1>
+
+<h2> Experiment 6: SRAM + XOR Folding + Von Neumann Debiasing Experiment </h2>
+<p><strong>Platform:</strong> Arduino Uno (ATmega328P)</p>
+
+<hr>
+
+<h2>Statistical Results</h2>
+
+<table>
+<tr>
+    <th>Metric</th>
+    <th>Value</th>
+</tr>
+<tr>
+    <td>Total Bits</td>
+    <td>25</td>
+</tr>
+<tr>
+    <td>Ones</td>
+    <td>11</td>
+</tr>
+<tr>
+    <td>Zeros</td>
+    <td>14</td>
+</tr>
+<tr>
+    <td>P(1)</td>
+    <td>0.440000</td>
+</tr>
+<tr>
+    <td>P(0)</td>
+    <td>0.560000</td>
+</tr>
+<tr class="highlight">
+    <td>Shannon Entropy</td>
+    <td>0.989587</td>
+</tr>
+</table>
+
+<hr>
+
+<h2>Analysis</h2>
+<ul>
+<li>Entropy reached 0.989587, close to the theoretical maximum of 1.</li>
+<li>Probability distribution moved closer to balance compared to raw SRAM.</li>
+<li>Significant bit reduction occurred due to Von Neumann filtering.</li>
+<li>Only 25 usable bits were produced from 1024 initial raw bits.</li>
+</ul>
+
+<hr>
+
+
+<h2>Conclusion</h2>
+<p>
+The combined XOR(8) and Von Neumann conditioning pipeline
+achieved near-ideal entropy performance. However, the severe
+reduction in bit count limits practical throughput. This method
+is suitable for high-security low-rate entropy generation but may
+not be efficient for high-speed applications.
+</p>
+
 
